@@ -44,33 +44,43 @@ class PropsController < ApplicationController
     if params[:board_id]
       @board = Board.find_by(id: params[:board_id])
       @props = Prop.filter_and_sort_by_date(@board)
+      respond_to do |format|
+        format.html {render :index}
+        format.json {render json: @props}
+      end
+      
     else
       @props = Prop.todays_sorted_props
-      if @props.empty?
+      @board = Board.find_by(id: @props.first.board_id)
+      unless @props.empty?
+        respond_to do |format|
+          format.html {render :index}
+          format.json {render json: @props}
+        end
+      else
         flash.now[:danger] = "You must create a new board."
         redirect_to new_board_path
       end
-      @board = Board.find_by(id: @props.first.board_id)
     end
+  end
 
-    def edit
-      set_prop
-    end
+  def edit
+    set_prop
+  end
 
-    def update
-      set_prop
-      if @prop.update(prop_params)
-        redirect_to prop_path(@prop)
-      else
-        render :edit
-      end
+  def update
+    set_prop
+    if @prop.update(prop_params)
+      redirect_to prop_path(@prop)
+    else
+      render :edit
     end
+  end
 
-    def destroy
-      set_prop
-      @prop.delete
-      redirect_to root_path
-    end
+  def destroy
+    set_prop
+    @prop.delete
+    redirect_to root_path
   end
 
   private
