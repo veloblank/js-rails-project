@@ -3,4 +3,6 @@ class PropSerializer < ActiveModel::Serializer
              :sport, :home_team, :away_team, :espn_game_identifier,
              :locked, :home_team_won, :away_team_won, :scored_by_admin,  
              :board_id, :created_at, :updated_at  
+  belongs_to :board
+  has_many :user_picks
 end

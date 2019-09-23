@@ -17,6 +17,10 @@ class BoardsController < ApplicationController
   def show
     set_board
     @props = Prop.filter_and_sort_by_date(@board)
+    respond_to do |format|
+      format.html {render :show}
+      format.json {render json: @board}
+    end
   end
 
   def edit
