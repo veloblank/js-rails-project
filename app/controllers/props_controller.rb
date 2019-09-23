@@ -13,6 +13,10 @@ class PropsController < ApplicationController
 
   def show
     set_prop
+    respond_to do |format|
+      format.html {render :show}
+      format.json {render json: @prop}
+    end
   end
 
   def create
